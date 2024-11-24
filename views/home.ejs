@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('./partials/head') %>
+		<title>Home Page</title>
+		<style>
+			/* General Styles */
+			body {
+				font-family: "Arial", sans-serif;
+				background-color: #f4f4f4;
+				margin: 0;
+				margin-top: 4rem;
+				padding: 0;
+			}
+
+			.container {
+				margin-top: 30px;
+			}
+
+			/* Card Styles */
+			.card {
+				border: none;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				margin-bottom: 20px;
+			}
+
+			.card img {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+			}
+
+			.card-body {
+				padding: 20px;
+			}
+
+			.card-title {
+				font-size: 1.25rem;
+				color: #333;
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
+
+			.card .btn {
+				background-color: #007bff;
+				color: #fff;
+				border: none;
+				padding: 8px 15px;
+				border-radius: 5px;
+				font-size: 0.9rem;
+				transition: background-color 0.3s;
+			}
+
+			.card .btn:hover {
+				background-color: #0056b3;
+			}
+
+			/* Responsive Grid Layout */
+			.row {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 20px;
+			}
+
+			.card {
+				width: 100%;
+				max-width: 300px;
+			}
+
+			@media (max-width: 768px) {
+				.card {
+					width: 100%;
+					max-width: 100%;
+				}
+			}
+
+			@media (min-width: 768px) and (max-width: 1024px) {
+				.card {
+					width: 45%;
+				}
+			}
+
+			@media (min-width: 1024px) {
+				.card {
+					width: 22%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<%- include('./partials/nav') %>
+		<div class="container home">
+			<div class="row">
+				<% blogs.forEach(blog => { %>
+				<div class="card">
+					<img
+						src="/<%= blog.coverImageURL %>"
+						class="card-img-top"
+						alt="Cover Image"
+					/>
+					<div class="card-body">
+						<h5 class="card-title"><%= blog.title %></h5>
+						<a href="/blog/<%= blog._id %>" class="btn btn-primary"
+							>View</a
+						>
+					</div>
+				</div>
+				<% }) %>
+			</div>
+		</div>
+		<%- include('./partials/scripts') %>
+	</body>
+</html>

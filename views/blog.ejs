@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('./partials/head') %>
+		<title>Blog Page</title>
+		<style>
+			/* General Styles */
+			body {
+				font-family: "Arial", sans-serif;
+				background-color: #fafafa;
+				margin: 0;
+				margin-top: 4rem;
+				padding: 0;
+				color: #333;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5 {
+				color: #333;
+				font-weight: bold;
+			}
+
+			.container {
+				margin-top: 50px;
+				max-width: 1000px;
+				margin: 0 auto;
+			}
+
+			/* Card Styling */
+			.card {
+				background-color: #fff;
+				border-radius: 8px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				margin-bottom: 40px;
+				overflow: hidden;
+				transition: transform 0.3s ease;
+			}
+
+			.card:hover {
+				transform: translateY(-5px);
+			}
+
+			/* Cover Image */
+			.cover_Image {
+				width: 100%;
+				height: 350px;
+				object-fit: cover;
+				border-bottom: 3px solid #ddd;
+			}
+
+			/* Card Body */
+			.card-body {
+				padding: 30px;
+				background-color: #fff;
+				line-height: 1.6;
+			}
+
+			.card-title {
+				font-size: 2rem;
+				margin-bottom: 20px;
+				font-weight: 600;
+				color: #2c3e50;
+			}
+
+			.card-content {
+				font-size: 1.2rem;
+				color: #555;
+				line-height: 1.7;
+			}
+
+			/* Author Info */
+			.author-info {
+				display: flex;
+				align-items: center;
+				margin-top: 30px;
+				margin-bottom: 30px;
+			}
+
+			.author-info img {
+				border-radius: 50%;
+				margin-right: 10px;
+			}
+
+			.author-info h5 {
+				font-size: 1.1rem;
+				font-weight: 600;
+				color: #2c3e50;
+			}
+
+			/* Comment Section */
+			.comment-section {
+				margin-top: 40px;
+				background-color: #f9f9f9;
+				padding: 30px;
+				border-radius: 8px;
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			}
+
+			.comment-section h3 {
+				font-size: 1.5rem;
+				margin-bottom: 20px;
+			}
+
+			.comment-form textarea {
+				width: 100%;
+				padding: 12px;
+				border-radius: 8px;
+				border: 1px solid #ddd;
+				font-size: 1rem;
+				resize: vertical;
+				min-height: 120px;
+				margin-bottom: 20px;
+				transition: border 0.3s ease;
+			}
+
+			.comment-form textarea:focus {
+				border-color: #3498db;
+			}
+
+			.comment-form button {
+				padding: 10px 20px;
+				background-color: #3498db;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				font-size: 1rem;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			}
+
+			.comment-form button:hover {
+				background-color: #2980b9;
+			}
+
+			.comment-list {
+				margin-top: 20px;
+			}
+
+			.comment-item {
+				background-color: #fff;
+				padding: 15px;
+				margin-bottom: 20px;
+				border-radius: 8px;
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+			}
+
+			.comment-item img {
+				border-radius: 50%;
+				margin-right: 10px;
+			}
+
+			.comment-item .comment-author {
+				font-weight: 600;
+				color: #2c3e50;
+			}
+
+			.comment-item .comment-content {
+				font-size: 1rem;
+				color: #555;
+				margin-top: 10px;
+			}
+
+			/* Media Queries for Responsiveness */
+			@media (max-width: 768px) {
+				.card {
+					margin: 10px;
+				}
+
+				.container {
+					padding: 0 15px;
+				}
+
+				.cover_Image {
+					height: 250px;
+				}
+
+				.card-body {
+					padding: 20px;
+				}
+
+				.card-title {
+					font-size: 1.5rem;
+				}
+
+				.author-info {
+					flex-direction: column;
+					align-items: flex-start;
+				}
+
+				.author-info h5 {
+					margin-top: 10px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<%- include('./partials/nav') %>
+
+		<div class="container">
+			<div class="card">
+				<img
+					src="/<%= blog.coverImageURL %>"
+					alt="Cover Image"
+					class="cover_Image"
+				/>
+				<div class="card-body">
+					<h5 class="card-title"><%= blog.title %></h5>
+					<div class="card-content"><%= blog.body %></div>
+				</div>
+
+				<!-- Author Info -->
+				<div class="author-info">
+					<img
+						src="<%= blog.createdBy.avatar %>"
+						alt="Author's Avatar"
+						width="50px"
+					/>
+					<h5><%= blog.createdBy.userName %></h5>
+				</div>
+			</div>
+
+			<!-- Comments Section -->
+			<div class="comment-section">
+				<h3>Comments (<%= comments.length %>)</h3>
+
+				<% if (locals.user) { %>
+				<form
+					action="/blog/comment/<%= blog._id %>"
+					method="post"
+					class="comment-form"
+				>
+					<textarea
+						name="content"
+						id="content"
+						placeholder="Add your comment here..."
+					></textarea>
+					<button type="submit">Submit Comment</button>
+				</form>
+				<% } else { %>
+				<p><strong>Log in</strong> to leave a comment.</p>
+				<% } %>
+
+				<div class="comment-list">
+					<% comments.forEach(comment => { %>
+					<div class="comment-item">
+						<div class="d-flex align-items-center">
+							<img
+								src="<%= comment.createdBy.avatar %>"
+								alt="Avatar"
+								width="30px"
+							/>
+							<span class="comment-author"
+								><%= comment.createdBy.userName %></span
+							>
+						</div>
+						<div class="comment-content">
+							<%= comment.content %>
+						</div>
+					</div>
+					<% }) %>
+				</div>
+			</div>
+		</div>
+
+		<%- include('./partials/scripts') %>
+	</body>
+</html>
